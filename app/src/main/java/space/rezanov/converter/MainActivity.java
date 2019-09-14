@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
+//
 //        second_input.addTextChangedListener(new TextWatcher(){ //слушает изменения в поле ввода №1
 //            @Override
 //            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
