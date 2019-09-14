@@ -61,13 +61,13 @@ public class MainActivity extends AppCompatActivity {
                         second_input.setText(String.valueOf(second_input_double / currency_double));
                     } catch (Exception e1) {
                     }
-                } else second_input.setText("0.0");
+                } else second_input.setText("");
             }
         });
 
 
 //
-//        second_input.addTextChangedListener(new TextWatcher(){ //слушает изменения в поле ввода №1
+//        second_input.addTextChangedListener(new TextWatcher(){ //слушает изменения в поле ввода №2
 //            @Override
 //            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 //            }
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             Document siteConvert;
             try {
-                siteConvert = Jsoup.connect("http://www.cbr.ru/scripts/XML_daily.asp").get();
+                siteConvert = Jsoup.connect("https://www.cbr.ru/scripts/XML_daily.asp").get();
                 Currency = siteConvert.select("Valute#R01670>Value");
                 currency_string = Currency.text().replaceAll(",",".");
                 currency_double = Double.valueOf(currency_string)/10;

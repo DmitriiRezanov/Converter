@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Конвертор</string>
+    <string name="rur">RUR</string>
+    <string name="tjs">TJS</string>
 </resources>
