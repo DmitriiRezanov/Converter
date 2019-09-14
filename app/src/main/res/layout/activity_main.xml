@@ -25,10 +25,10 @@
             <TextView
                 android:id="@+id/firstCurrency"
                 style="@style/Widget.AppCompat.TextView.SpinnerItem"
-                android:layout_width="50dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="RUR"
+                android:text="@string/rur"
                 android:textAlignment="center"
                 android:textColor="#3644A2"
                 android:textColorHighlight="#0A1B81"
@@ -36,10 +36,10 @@
 
             <TextView
                 android:id="@+id/secondCurrency"
-                android:layout_width="50dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TJ"
+                android:text="@string/tjs"
                 android:textAlignment="center"
                 android:textColor="#3644A2"
                 android:textColorHighlight="#0A1B81"
@@ -54,9 +54,10 @@
 
             <EditText
                 android:id="@+id/firstInput"
-                android:layout_width="206dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:autoText="true"
+                android:layout_weight="1"
+                android:autoText="false"
                 android:ems="10"
                 android:inputType="number"
                 android:textAlignment="center"
@@ -65,10 +66,10 @@
 
             <EditText
                 android:id="@+id/secondInput"
-                android:layout_width="206dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:autoText="true"
+                android:autoText="false"
                 android:ems="10"
                 android:inputType="number"
                 android:textAlignment="center"
