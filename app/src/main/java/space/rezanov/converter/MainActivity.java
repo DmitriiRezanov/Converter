@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import org.jsoup.Jsoup;
@@ -17,8 +19,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView first_input;//создаем экземпляр объекта представления
-    TextView second_input;
+    EditText first_input;//создаем экземпляр объекта представления
+    EditText second_input;
 
     double first_input_double;
     String first_input_string;
@@ -36,12 +38,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         new CalculateCurrency().execute();
 
         first_input = findViewById(R.id.firstInput);  //и выполняем его захват из макета
         second_input = findViewById(R.id.secondInput);
         currency_text = findViewById(R.id.currencyText);
+
+
 
         first_input.addTextChangedListener(new TextWatcher(){ //слушает изменения в поле ввода №1
             @Override
@@ -53,38 +56,43 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s){
-                first_input_string = first_input.getText().toString();
-                if(!first_input_string.isEmpty()) {
-                    try {
-                        second_input_double = Double.valueOf(first_input_string);
-                        second_input.setText(String.valueOf(second_input_double / currency_double));
-                    } catch (Exception e1) {
-                    }
-                } else second_input.setText("");
+            public void afterTextChanged(Editable s) {
+                if(first_input.hasFocus()) {
+                    first_input_string = first_input.getText().toString();
+                    if (!first_input_string.isEmpty()) {
+                        try {
+                            second_input_double = Double.valueOf(first_input_string);
+                            second_input.setText(String.valueOf(second_input_double / currency_double));
+                        } catch (Exception e1) {
+                        }
+                    } else second_input.setText("");
+                }
             }
         });
 
+        second_input.addTextChangedListener(new TextWatcher() { //слушает изменения в поле ввода №1
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
-//
-//        second_input.addTextChangedListener(new TextWatcher(){ //слушает изменения в поле ввода №2
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s){
-//                second_input_string = second_input.getText().toString();
-//                    first_input_double = Double.valueOf(second_input_string) * currency_double;
-//                    first_input.setText("first_input_double");
-//            }
-//        });
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
-
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(second_input.hasFocus()) {
+                    second_input_string = second_input.getText().toString();
+                    if (!second_input_string.isEmpty()) {
+                        try {
+                            first_input_double = Double.valueOf(second_input_string);
+                            first_input.setText(String.valueOf(first_input_double * currency_double));
+                        } catch (Exception e1) {
+                        }
+                    } else first_input.setText("");
+                }
+            }
+        });
     }
 
     public class CalculateCurrency extends AsyncTask<String, Void, String>{
