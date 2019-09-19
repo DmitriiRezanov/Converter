@@ -3,6 +3,7 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="background_input">#353E4F</color>
+    <color name="background_top">#353E4F</color>
+    <color name="background_calculate">#3B4555</color>
     <color name="text">#99462a</color>
 </resources>

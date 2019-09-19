@@ -1,6 +1,11 @@
 package space.rezanov.converter;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
+import space.rezanov.converter.FragmentCalculate;
+import space.rezanov.converter.History;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,6 +14,9 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.tabs.TabLayout;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -19,91 +27,45 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText first_input;//создаем экземпляр объекта представления
-    EditText second_input;
-
-    double first_input_double;
-    String first_input_string;
-
-    double second_input_double;
-    String second_input_string;
+    private TabLayout tabLayout;
+    private AppBarLayout appBarLayout;
+    private ViewPager viewPager;
 
     Elements Currency;
     String currency_string;
-    double currency_double;
-
-    TextView currency_text;
+    static double currency_double;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         new CalculateCurrency().execute();
 
-        first_input = findViewById(R.id.firstInput);  //и выполняем его захват из макета
-        second_input = findViewById(R.id.secondInput);
-        currency_text = findViewById(R.id.currencyText);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        appBarLayout = (AppBarLayout) findViewById(R.id.appBar);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.AddFragment(new FragmentCalculate(),"Расчеты");
+        adapter.AddFragment(new History(),"История");
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
 
 
 
-        first_input.addTextChangedListener(new TextWatcher(){ //слушает изменения в поле ввода №1
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(first_input.hasFocus()) {
-                    first_input_string = first_input.getText().toString();
-                    if (!first_input_string.isEmpty()) {
-                        try {
-                            second_input_double = Double.valueOf(first_input_string);
-                            second_input.setText(String.valueOf(second_input_double / currency_double));
-                        } catch (Exception e1) {
-                        }
-                    } else second_input.setText("");
-                }
-            }
-        });
-
-        second_input.addTextChangedListener(new TextWatcher() { //слушает изменения в поле ввода №1
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(second_input.hasFocus()) {
-                    second_input_string = second_input.getText().toString();
-                    if (!second_input_string.isEmpty()) {
-                        try {
-                            first_input_double = Double.valueOf(second_input_string);
-                            first_input.setText(String.valueOf(first_input_double * currency_double));
-                        } catch (Exception e1) {
-                        }
-                    } else first_input.setText("");
-                }
-            }
-        });
     }
 
-    public class CalculateCurrency extends AsyncTask<String, Void, String>{
+    public class CalculateCurrency extends AsyncTask<Void, Void, Double>{
         @Override
-        protected String doInBackground(String... strings) {
+        protected Double doInBackground(Void... voids) {
             Document siteConvert;
             try {
                 siteConvert = Jsoup.connect("https://www.cbr.ru/scripts/XML_daily.asp").get();
                 Currency = siteConvert.select("Valute#R01670>Value");
                 currency_string = Currency.text().replaceAll(",",".");
                 currency_double = Double.valueOf(currency_string)/10;
+                return currency_double;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -111,9 +73,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            currency_text.setText((String.valueOf(currency_double)));
+        protected void onPostExecute(Double value_doInBackground) {
+            FragmentCalculate.currency_text.setText((String.valueOf(value_doInBackground)));
         }
     }
-
 }
